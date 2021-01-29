@@ -4,23 +4,32 @@ const tiles = [];
 
 function makeTile(type, x, y) {
 	const tile = (imgpath, click) => {
-		let hw = 0;
-		let hh = 0;
-		const img = loadImage(imgpath, img => {
-			hw = img.width / 2;
-			hh = img.height / 2;
+		let t = {
+			w: 0,
+			h: 0,
+			img: void 0,
+			draw: () => {
+				if (t.img) { image(t.img, x, y); }
+			},
+			clicked: (cx, cy) => {
+				if (contains(cx, cy)) {
+					console.log(`Clicked: ${type}`);
+					click();
+					t.img = void 0;
+				}
+			},
+		};
+		
+		t.img = imgpath && loadImage(imgpath, img => {
+			t.w = img.width;
+			t.h = img.height;
 		});
 		
 		const contains = (cx, cy) => {
-			return cx >= x - hw && cx <= x + hw && cy >= y - hh && cy <= y + hh;
+			return t.img && cx >= x && cx <= x + t.w && cy >= y && cy <= y + t.h;
 		};
 		
-		return {
-			"img": img,
-			"clicked": (cx, cy) => { if (contains(cx, cy)) { click() } },
-			"x": x,
-			"y": y,
-		}
+		return t;
 	}
 	
 	let t = (() => {
@@ -30,7 +39,6 @@ function makeTile(type, x, y) {
 			}
 			case "health": {
 				return tile("nor_asset/health.png", () => {
-					console.log("bruh u clicked me");
 					stats.health += stats.maxHealth;
 				})
 			}

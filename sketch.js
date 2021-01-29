@@ -23,12 +23,11 @@ function draw() {
   //translate(windowWidth/2, windowHeight/2);
   text("hello, this is working", 0, 0);
   
-  image(tile.img, tile.x, tile.y);
+  
+  tiles.forEach(t => t.draw());
 }
 
-function mouseClicked() { 
-    console.log(mouseX);
-    console.log(mouseY); 
+function mouseClicked() {
 	tiles.forEach(t => t.clicked(mouseX, mouseY));
 } 
 
