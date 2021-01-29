@@ -1,4 +1,3 @@
-let tile = void 0;
 let last = 0;
 
 function setup() {
@@ -6,7 +5,9 @@ function setup() {
   canvas.style('display', 'block');
   last = Date.now();
   
-  tile = makeTile("health", 300, 300);
+  makeTile("monster", 100, 100, { "dmg": 5, "health": 15 });
+  makeTile("empty", 300, 100);
+  makeTile("health", 300, 300);
 }
 
 function windowResized() {
@@ -22,7 +23,6 @@ function draw() {
   
   //translate(windowWidth/2, windowHeight/2);
   text("hello, this is working", 0, 0);
-  
   
   tiles.forEach(t => t.draw());
 }
