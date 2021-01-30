@@ -84,6 +84,8 @@ const grid = {
 		grid.hit_color = 0;
 		grid.tiles = [];
 		hero.init();
+		stats.maxHealth = 3;
+		gui.init();
 	},
 	gameover: () => {
 		console.log("Game over, stub");
@@ -158,18 +160,22 @@ function makeTile(content, x, y, my_stats) {
 			}
 			case "health": {
 				return tile({ fg: ["nor_asset/health.png"], bg: content.bg }, (me) => {
-					stats.health += 1;
+					stats.health += my_stats.heal;
 					stats.health = Math.min(stats.maxHealth, stats.health);
 					me.die();
 				});
 			}
+			case "poison":
+			case "monster_blu":
 			case "monster": {
 				const types = [
 					["nor_asset/Monster1-1.png", "nor_asset/Monster1-2.png"],
 					["nor_asset/Monster2-1.png", "nor_asset/Monster2-2.png"],
-					["nor_asset/Monster3-1.png", "nor_asset/Monster3-2.png"],
 				];
-				const t = types[(Math.random() * types.length) | 0];
+				let t = types[(Math.random() * types.length) | 0];
+				if (content.type == "monster_blu") { t = ["nor_asset/Monster3-1.png", "nor_asset/Monster3-2.png"]; }
+				if (content.type == "poison") { t = ["nor_asset/poison.png"]; }
+				
 				return tile({ fg: t, bg: content.bg }, (me) => {
 					stats.health -= me.my_stats.dmg;
 					stats.health = Math.max(0, stats.health);
@@ -191,6 +197,13 @@ function makeTile(content, x, y, my_stats) {
 				return tile({ fg: [ "nor_asset/goal1_1.png", "nor_asset/goal1_2.png" ], bg: content.bg }, (me) => {
 					console.log("stub, picked up quest item");
 					game_state = quest_completed;
+				});
+			}
+			case "heart": {
+				return tile({ fg: ["nor_asset/potion_max_health.png"], bg: content.bg }, (me) => {
+					stats.maxHealth += 1;
+					me.die();
+					gui.init();
 				});
 			}
 			default: {
