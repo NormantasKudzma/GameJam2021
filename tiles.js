@@ -143,6 +143,7 @@ function makeTile(content, x, y, my_stats) {
 			case "quest": {
 				return tile({ fg: "nor_asset/goal1.png", bg: content.bg }, (me) => {
 					console.log("stub, picked up quest item");
+					game_state = quest_completed;
 				});
 			}
 			default: {
