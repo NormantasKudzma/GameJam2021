@@ -8,6 +8,8 @@ const TILE_QUEST = 5;
 const dimensions = 10;
 const number_of_rooms = 20;
 
+let level_nr = 1;
+
 function TileInDungeon(level, x, y) {
 	if (x < 0 || x >= dimensions || y < 0 || y >= dimensions) {
 		return false;
@@ -42,7 +44,7 @@ function CanPlaceRoom(level, x, y) {
 	return false;
 }
 
-function getLevel(isRandom) {
+function getLevel(isRandom, nr) {
 	let level;
 	if (isRandom) {
 		level = Array(dimensions).fill().map(() => Array(dimensions).fill(0));
@@ -66,7 +68,7 @@ function getLevel(isRandom) {
 			rooms_created++;
 		}
 
-	} else {
+	} else if (nr == 1) {
 	/*level 1*/
 		level = [
 	/*1*/	[TILE_EMPTY, TILE_EMPTY, TILE_MONSTER, TILE_MONSTER, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE],
@@ -78,6 +80,10 @@ function getLevel(isRandom) {
 	/*7*/	[TILE_NO_TILE, TILE_NO_TILE, TILE_HEALTH_POT, TILE_HEALTH_POT, TILE_NO_TILE, TILE_MONSTER, TILE_MONSTER, TILE_MONSTER],
 	/*8*/	[TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_EXIT]
 		];
+	} else if (nr == 2) {
+		level = [
+			[ TILE_EMPTY ]
+		];
 	}
 
 	return level;
@@ -86,7 +92,7 @@ function getLevel(isRandom) {
 function do_the_map_thing() {
 	grid.clear();
 	
-	const level = getLevel(false);
+	const level = getLevel(false, level_nr);
 	
 	const neighbours_to_tile = {
 		"0100": "nor_asset/tiles/one_down.png",

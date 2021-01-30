@@ -51,7 +51,6 @@ const grid = {
 		grid.is_game_over = false;
 		grid.hit_color = 0;
 		grid.tiles = [];
-		stats.health = stats.maxHealth;
 	},
 	gameover: () => {
 		console.log("Game over, stub");
@@ -137,7 +136,7 @@ function makeTile(content, x, y, my_stats) {
 			}
 			case "exit": {
 				return tile({ fg: "nor_asset/exit.png", bg: content.bg }, (me) => {
-					grid.clear();
+					level_nr++;
 					do_the_map_thing();
 				});
 			}

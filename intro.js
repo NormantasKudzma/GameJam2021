@@ -9,6 +9,7 @@ const intro = {
 	},
 	clicked: (cx, cy) => {
 		game_state = grid;
+		stats.health = stats.maxHealth;
 		do_the_map_thing();
 	},
 	hover: (cx, cy) => {

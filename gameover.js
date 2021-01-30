@@ -8,6 +8,7 @@ const gameover = {
 		gameover.img.draw();
 	},
 	clicked: (cx, cy) => {
+		level_nr = 1;
 		game_state = intro;
 	},
 	hover: (cx, cy) => {
