@@ -4,6 +4,10 @@ const TILE_MONSTER = 2;
 const TILE_HEALTH_POT = 3;
 const TILE_EXIT = 4;
 const TILE_QUEST = 5;
+const TILE_MONSTER_STRONG = 6;
+const TILE_HEALTH_POT2 = 7;
+const TILE_POISON = 8;
+const TILE_HEART = 9;
 
 const dimensions = 10;
 const number_of_rooms = 20;
@@ -98,7 +102,7 @@ function getLevel(isRandom, nr) {
 				/*1*/	[1, 3, 1, 2, 1, 0, 0, 0],
 				/*2*/	[1, 1, 3, 0, 1, 1, 2, 3],
 				/*3*/	[0, 0, 0, 0, 2, 0, 0, 0],
-				/*4*/	[4, 2, 0, 1, 3, 1, 3, 2],
+				/*4*/	[5, 2, 0, 1, 3, 1, 3, 2],
 				/*5*/	[0, 3, 0, 1, 0, 0, 0, 1],
 				/*6*/	[3, 2, 1, 2, 0, 0, 0, 2],
 				/*7*/	[0, 2, 0, 1, 0, 0, 0, 1],
@@ -150,9 +154,14 @@ function do_the_map_thing() {
 	};
 	
 	const what_is_that = (num) => {
-		const types = [ void 0, "empty", "monster", "health", "exit", "quest" ];
+		const types = [ void 0, "empty", "monster", "health", "exit", "quest", "monster_blu", "health2", "poison", "heart" ];
 		const t = types[num | 0];
-		const s = t == "monster" ? { "dmg": 1, "health": 1 } : void 0;
+		let s = void 0;
+		if (t == "monster") { s = { "dmg": 1, "health": 1 }; }
+		if (t == "monster_blu") { s = { "dmg": 1, "health": 2 }; }
+		if (t == "poison") { s = { "dmg": 1, "health": 1 }; }
+		if (t == "health") { s = { "heal": 1 }; }
+		if (t == "health2") { s = { "heal": 2 }; }
 		return { type: t, stats: s };
 	};
 	

@@ -32,18 +32,13 @@ const grid = {
 		background(37 + grid.hit_color, 19, 26);
 
 		texture(grid.background);
-		let u = width / grid.background.width;
-		let v = height / grid.background.height;
-		textureWrap(REPEAT);
-		textureMode(NORMAL);
-		beginShape();
-			vertex(0, 0, 0, 0);
-			vertex(width, 0, u, 0);
-			vertex(width, height, u, v);
-			vertex(0, height, 0, v);
-		endShape();
-		textureWrap(CLAMP);
-		textureMode(IMAGE);
+		const u = 1 + width / grid.background.width;
+		const v = 1 + height / grid.background.height;
+		for (let i = 0; i < v; ++i) {
+			for (let j = 0; j < u; ++j) {
+				rect(j * grid.background.width, i * grid.background.height, grid.background.width, grid.background.height);
+			}
+		}
 
 		grid.tiles.forEach(t => t.draw());
 
@@ -89,6 +84,8 @@ const grid = {
 		grid.hit_color = 0;
 		grid.tiles = [];
 		hero.init();
+		stats.maxHealth = stats.initHealth;
+		gui.init();
 	},
 	gameover: () => {
 		console.log("Game over, stub");
@@ -105,6 +102,7 @@ function makeTile(content, x, y, my_stats) {
 			x: x,
 			y: y,
 			frame_index: 0,
+			hearts_full: [],
 			fg: imgpaths.fg && imgpaths.fg.map(p => makeImage(p, x * grid.step, y * grid.step)),
 			bg: makeImage(imgpaths.bg, x * grid.step, y * grid.step),
 			monster_sound: makeSound(imgpaths.sound),
@@ -120,15 +118,23 @@ function makeTile(content, x, y, my_stats) {
 				if (t.active && t.revealed && t.fg) {
 					if (grid.current_frame % 30 == 0) { t.frame_index = (t.frame_index + 1) % t.fg.length; }
 					t.fg[t.frame_index].draw();
+					
+					for (let i = 0; my_stats.health && i < my_stats.health; ++i) {
+						t.hearts_full[i].draw();
+					}
 				}
 			},
 			clicked: (cx, cy) => {
 				if (t.hovered(cx, cy)) {
 					console.log(`Clicked: ${content.type}`);
-					//const revealed_neighbour = t.neighbours.find(n => n.revealed && !n.active);
-					//if (revealed_neighbour) { hero.move(revealed_neighbour.x, revealed_neighbour.y); }
-					hero.move(t.x, t.y);
 					if (t.active) { click(t); } 
+					if (!t.active) {
+						hero.move(t.x, t.y);
+					}
+					else {
+						const revealed_neighbour = t.neighbours.find(n => n.revealed && !n.active);
+						if (revealed_neighbour) { hero.move(revealed_neighbour.x, revealed_neighbour.y); }
+					}
 				}
 			},
 			hovered: (cx, cy) => {
@@ -164,27 +170,36 @@ function makeTile(content, x, y, my_stats) {
 			}
 			case "health": {
 				return tile({ fg: ["nor_asset/health.png"], bg: content.bg }, (me) => {
-					stats.health += 1;
+					stats.health += my_stats.heal;
 					stats.health = Math.min(stats.maxHealth, stats.health);
 					me.die();
 					console.log(" *** health die *** ");
 				});
 			}
+			case "poison":
+			case "monster_blu":
 			case "monster": {
 				const types = [
 					["nor_asset/Monster1-1.png", "nor_asset/Monster1-2.png"],
 					["nor_asset/Monster2-1.png", "nor_asset/Monster2-2.png"],
-					["nor_asset/Monster3-1.png", "nor_asset/Monster3-2.png"],
 				];
 				const sounds = [
 					"nor_asset/sounds/monster_die_1",
 					"nor_asset/sounds/monster_die_2",
-					"nor_asset/sounds/monster_die_3",
 				];
 				const index = (Math.random() * types.length) | 0;
-				const t = types[index];
-				const s = sounds[index];
-				return tile({ fg: t, bg: content.bg, sound: s }, (me) => {
+				let t = types[index];
+				let s = sounds[index];
+				if (content.type == "monster_blu") {
+					t = ["nor_asset/Monster3-1.png", "nor_asset/Monster3-2.png"];
+					s = "nor_asset/sounds/monster_die_3";
+				}
+				if (content.type == "poison") {
+					t = ["nor_asset/poison.png"];
+					s = "nor_asset/sounds/monster_die_3";
+				}
+
+				const monster = tile({ fg: t, bg: content.bg, sound: s }, (me) => {
 					stats.health -= me.my_stats.dmg;
 					stats.health = Math.max(0, stats.health);
 					if (stats.health <= 0) { game_state = gameover; }
@@ -200,6 +215,13 @@ function makeTile(content, x, y, my_stats) {
 					}
 					grid.onhit();
 				});
+				
+				const offx = grid.step / 2 - my_stats.health / 2 * 16;
+				for (let i = 0; i < my_stats.health; ++i) {
+					monster.hearts_full.push(makeImage("nor_asset/mini_life.png", offx + i * 22 + x * grid.step, 2 + y * grid.step));
+				}
+				
+				return monster;
 			}
 			case "exit": {
 				return tile({ fg: ["nor_asset/exit.png"], bg: content.bg }, (me) => {
@@ -211,6 +233,13 @@ function makeTile(content, x, y, my_stats) {
 				return tile({ fg: [ "nor_asset/goal1_1.png", "nor_asset/goal1_2.png" ], bg: content.bg }, (me) => {
 					console.log("stub, picked up quest item");
 					game_state = quest_completed;
+				});
+			}
+			case "heart": {
+				return tile({ fg: ["nor_asset/potion_max_health.png"], bg: content.bg }, (me) => {
+					stats.maxHealth += 1;
+					me.die();
+					gui.init();
 				});
 			}
 			default: {
