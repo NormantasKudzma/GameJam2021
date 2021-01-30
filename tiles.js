@@ -13,6 +13,7 @@ const grid = {
 		grid.hit_color = Math.max(grid.hit_color - 7, 0);
 		background(37 + grid.hit_color, 19, 7);
 		grid.tiles.forEach(t => t.draw());
+		gui.draw();
 	},
 	clicked: (x, y) => {
 		if (grid.is_game_over) { return; }
@@ -47,9 +48,10 @@ const grid = {
 		].filter(n => n);
 	},
 	clear: () => {
+		grid.is_game_over = false;
+		grid.hit_color = 0;
 		grid.tiles = [];
 		stats.health = stats.maxHealth;
-		
 	},
 	gameover: () => {
 		console.log("Game over, stub");
@@ -124,7 +126,7 @@ function makeTile(content, x, y, my_stats) {
 				return tile({ fg: t, bg: content.bg }, (me) => {
 					stats.health -= me.my_stats.dmg;
 					stats.health = Math.max(0, stats.health);
-					if (stats.health <= 0) { grid.gameover(); }
+					if (stats.health <= 0) { game_state = gameover; }
 					
 					me.my_stats.health -= stats.dmg;
 					if (me.my_stats.health <= 0) { me.die(); }

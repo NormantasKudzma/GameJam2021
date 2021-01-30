@@ -2,15 +2,18 @@ let global_scale = 1;
 const ref_width = 800;
 const ref_height = 800;
 
+let game_state = void 0;
+
 function setup() {
 	const canvas = createCanvas(windowWidth, windowHeight);
 	canvas.style('display', 'block');
 	windowResized();
 	
 	gui.init();
+	intro.init();
+	gameover.init();
 	grid.init();
-	
-	do_the_map_thing();
+	game_state = intro;
 }
 
 function windowResized() {
@@ -22,15 +25,13 @@ function windowResized() {
 
 function draw() {
 	scale(global_scale);
-	grid.draw();
-	
-	gui.draw();
+	game_state.draw();
 }
 
 function mouseClicked() {
-	grid.clicked(mouseX / global_scale, mouseY / global_scale);
+	if (game_state) { game_state.clicked(mouseX / global_scale, mouseY / global_scale); }
 }
 
 function mouseMoved() { 
-    grid.hover(mouseX / global_scale, mouseY / global_scale);
-} 
+    if (game_state) { game_state.hover(mouseX / global_scale, mouseY / global_scale); }
+}
