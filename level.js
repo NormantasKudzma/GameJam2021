@@ -55,7 +55,7 @@ function getLevel() {
 			}
 		}
 		const selected_tile = Math.floor((Math.random() * tiles_created));
-		level[level_x[selected_tile]][level_y[selected_tile]] = TILE_ALIVE;
+		level[level_x[tiles_created]][level_y[tiles_created]] = TILE_ALIVE;
 	}
 	return level;
 }
