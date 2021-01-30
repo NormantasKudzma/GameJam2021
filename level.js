@@ -68,22 +68,47 @@ function getLevel(isRandom, nr) {
 			rooms_created++;
 		}
 
-	} else if (nr == 1) {
-	/*level 1*/
-		level = [
-	/*1*/	[TILE_EMPTY, TILE_EMPTY, TILE_MONSTER, TILE_EMPTY, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE],
-	/*2*/	[TILE_NO_TILE, TILE_EMPTY, TILE_NO_TILE, TILE_HEALTH_POT, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE],
-	/*3*/	[TILE_NO_TILE, TILE_MONSTER, TILE_MONSTER, TILE_EMPTY, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE],
-	/*4*/	[TILE_NO_TILE, TILE_EMPTY, TILE_NO_TILE, TILE_MONSTER, TILE_MONSTER, TILE_EMPTY, TILE_NO_TILE, TILE_NO_TILE],
-	/*5*/	[TILE_HEALTH_POT, TILE_EMPTY, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_HEALTH_POT, TILE_NO_TILE, TILE_NO_TILE],
-	/*6*/	[TILE_HEALTH_POT, TILE_NO_TILE, TILE_NO_TILE, TILE_MONSTER, TILE_HEALTH_POT, TILE_EMPTY, TILE_NO_TILE, TILE_NO_TILE],
-	/*7*/	[TILE_NO_TILE, TILE_NO_TILE, TILE_HEALTH_POT, TILE_HEALTH_POT, TILE_NO_TILE, TILE_MONSTER, TILE_MONSTER, TILE_EMPTY],
-	/*8*/	[TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_EXIT]
-		];
-	} else if (nr == 2) {
-		level = [
-			[ TILE_EMPTY ]
-		];
+	} else switch (nr) {
+		case 1:
+			level = [//  1  2  3  4  5  6  7  8
+				/*1*/	[1, 1, 2, 1, 0, 0, 0, 0],
+				/*2*/	[0, 1, 0, 3, 0, 0, 0, 0],
+				/*3*/	[0, 2, 2, 1, 0, 0, 0, 0],
+				/*4*/	[0, 1, 0, 2, 2, 1, 0, 0],
+				/*5*/	[3, 1, 0, 0, 0, 3, 0, 0],
+				/*6*/	[3, 0, 0, 2, 3, 1, 0, 0],
+				/*7*/	[0, 0, 3, 3, 0, 2, 2, 1],
+				/*8*/	[0, 0, 0, 0, 0, 0, 0, 4]
+			];
+			break;
+		case 2:
+			level = [//  1  2  3  4  5  6  7  8
+				/*1*/	[1, 3, 1, 3, 1, 0, 3, 0],
+				/*2*/	[3, 0, 0, 0, 1, 2, 1, 0],
+				/*3*/	[1, 0, 3, 0, 1, 0, 0, 0],
+				/*4*/	[2, 0, 1, 1, 2, 0, 4, 2],
+				/*5*/	[1, 0, 1, 0, 0, 0, 0, 2],
+				/*6*/	[3, 0, 2, 0, 0, 3, 1, 1],
+				/*7*/	[1, 0, 2, 1, 1, 1, 0, 1],
+				/*8*/	[2, 1, 1, 0, 0, 1, 1, 3]
+			];
+			break;
+		case 3:
+			level = [//  1  2  3  4  5  6  7  8
+				/*1*/	[1, 3, 1, 2, 1, 0, 0, 0],
+				/*2*/	[1, 1, 3, 0, 1, 1, 2, 3],
+				/*3*/	[0, 0, 0, 0, 2, 0, 0, 0],
+				/*4*/	[4, 2, 0, 1, 3, 1, 3, 2],
+				/*5*/	[0, 3, 0, 1, 0, 0, 0, 1],
+				/*6*/	[3, 2, 1, 2, 0, 0, 0, 2],
+				/*7*/	[0, 2, 0, 1, 0, 0, 0, 1],
+				/*8*/	[3, 3, 0, 2, 1, 3, 3, 1]
+			];
+			break;
+		default:
+			level = [
+				[ TILE_EMPTY ]
+			];
 	}
 
 	return level;
