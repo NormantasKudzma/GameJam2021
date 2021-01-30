@@ -33,14 +33,12 @@ const grid = {
 		if (t) { t.reveal(); }
 	},
 	neighbours_of: (x, y) => {
-		let r= [
+		return [
 			grid.find(x + 1, y + 0),
 			grid.find(x - 1, y + 0),
 			grid.find(x + 0, y + 1),
 			grid.find(x + 0, y - 1),
-		];
-		r = r.filter(n => n);
-		return r;
+		].filter(n => n);
 	},
 	clear: () => {
 		grid.tiles = [];
@@ -79,7 +77,9 @@ function makeTile(content, x, y, my_stats) {
 				grid.neighbours_of(t.x, t.y).forEach(n => n.reveal());
 			},
 			reveal: () => {
+				const die_now = !t.active && !t.revealed;
 				t.revealed = true;
+				if (die_now) { t.die(); }
 			},
 			highlight: (on) => {
 				t.bg.highlight(on);
@@ -88,12 +88,15 @@ function makeTile(content, x, y, my_stats) {
 			neighbours: [],
 		};
 		
-		t.active = !!t.fg;
+		t.active = !!imgpaths.fg;
 		return t;
 	}
 	
 	let t = (() => {
 		switch (content.type){
+			case "empty": {
+				return tile({ bg: content.bg }, (me) => {});
+			}
 			case "health": {
 				return tile({ fg: "nor_asset/health.png", bg: content.bg }, (me) => {
 					stats.health += stats.maxHealth;

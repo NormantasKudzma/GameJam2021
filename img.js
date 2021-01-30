@@ -10,7 +10,7 @@ function makeImage(path, x, y){
 		tint: false,
 		draw: () => {
 			const tex = img_cache[path];
-			if (tex.tex) {
+			if (tex && tex.tex) {
 				if (img.tint) { tint(mouseover_tint[0], mouseover_tint[1], mouseover_tint[2]); }
 				image(tex.tex, x, y);
 				noTint();

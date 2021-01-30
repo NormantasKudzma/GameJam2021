@@ -96,12 +96,17 @@ function do_the_map_thing() {
 		].map(x => x | 0);
 	};
 	
+	const randomType = () => {
+		const types = [ "health", "empty" ];
+		return types[(Math.random() * types.length) | 0];
+	};
+	
 	for (let y = 0; y < level.length; ++y) {
 		for (let x = 0; x < level[y].length; ++x) {
 			if (level[y][x] == 0) { continue; }
 			
 			const bg = neighbours_to_tile[neighbours_of(x, y).join("")];
-			makeTile({ "type": "health", "bg": bg }, x, y);
+			makeTile({ "type": randomType(), "bg": bg }, x, y);
 		}
 	}
 	
