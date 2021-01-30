@@ -11,6 +11,9 @@ function TileInDungeon(level, x, y) {
 }
 
 function CanPlaceRoom(level, x, y) {
+	if (level[x][y] == TILE_ALIVE) {
+		return false;
+	}
 	if (TileInDungeon(level, x - 1, y - 1)) {
 		if (level[x - 1][y - 1] == TILE_ALIVE) {
 			return true;
