@@ -112,13 +112,21 @@ function makeTile(content, x, y, my_stats) {
 				})
 			}
 			case "monster": {
-				return tile({ fg: "nor_asset/bad.png", bg: content.bg }, (me) => {
+				const types = [ "nor_asset/Monster1.png", "nor_asset/Monster2.png" ];
+				const t = types[(Math.random() * types.length) | 0];
+				return tile({ fg: t, bg: content.bg }, (me) => {
 					stats.health -= me.my_stats.dmg;
 					stats.health = Math.max(0, stats.health);
 					if (stats.health <= 0) { grid.gameover(); }
 					
 					me.my_stats.health -= stats.dmg;
 					if (me.my_stats.health <= 0) { me.die(); }
+				})
+			}
+			case "exit": {
+				return tile({ fg: "nor_asset/exit.png", bg: content.bg }, (me) => {
+					grid.clear();
+					do_the_map_thing();
 				})
 			}
 			default: {
