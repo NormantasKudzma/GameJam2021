@@ -12,6 +12,7 @@ function setup() {
 	gui.init();
 	intro.init();
 	gameover.init();
+	quest_completed.init();
 	grid.init();
 	game_state = intro;
 }
