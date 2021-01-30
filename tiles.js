@@ -145,13 +145,23 @@ function makeTile(content, x, y, my_stats) {
 			clicked: (cx, cy) => {
 				if (t.hovered(cx, cy)) {
 					console.log(`Clicked: ${content.type}`);
+					const bro_what_level = level_nr;
 					if (t.active) { click(t); } 
-					if (!t.active) {
-						hero.move(t.x, t.y);
-					}
-					else {
-						const revealed_neighbour = t.neighbours.find(n => n.revealed && !n.active);
-						if (revealed_neighbour) { hero.move(revealed_neighbour.x, revealed_neighbour.y); }
+					
+					/**
+					* This be workaround for when you climb ladder
+					* Im lazy now to fix it, so dont move anything around
+					* And may god be with you if you do decide to understand this
+					* hot garbage
+					*/
+					if (bro_what_level == level_nr) {
+						if (!t.active) {
+							hero.move(t.x, t.y);
+						}
+						else {
+							const revealed_neighbour = t.neighbours.find(n => n.revealed && !n.active);
+							if (revealed_neighbour) { hero.move(revealed_neighbour.x, revealed_neighbour.y); }
+						}
 					}
 				}
 			},
@@ -248,6 +258,7 @@ function makeTile(content, x, y, my_stats) {
 				return tile({ fg: ["nor_asset/exit.png"], bg: content.bg }, (me) => {
 					level_nr++;
 					do_the_map_thing();
+					hero.move(0, 0);
 				});
 			}
 			case "quest": {
