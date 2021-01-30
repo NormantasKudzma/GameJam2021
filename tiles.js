@@ -22,6 +22,7 @@ const grid = {
 	step: 80,
 	tiles: [],
 	fog_of_war: void 0,
+	background: void 0,
 	is_game_over: false,
 	hit_color: 0,
 	current_frame: 0,
@@ -29,6 +30,10 @@ const grid = {
 		++grid.current_frame;
 		grid.hit_color = Math.max(grid.hit_color - 7, 0);
 		background(37 + grid.hit_color, 19, 26);
+		
+		texture(grid.background);
+		rect(0, 0, width, height, 10, 10);
+		
 		grid.tiles.forEach(t => t.draw());
 		hero.draw();
 		gui.draw();
@@ -49,6 +54,9 @@ const grid = {
 	},
 	init: () => {
 		grid.fog_of_war = loadImage("nor_asset/fog.png");
+		textureWrap(REPEAT);
+		grid.background = loadImage("nor_asset/BackgroundTexture.png");
+		textureWrap(CLAMP);
 		grid.clear();
 	},
 	find: (x, y) => {
