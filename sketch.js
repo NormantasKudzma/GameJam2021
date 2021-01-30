@@ -4,13 +4,9 @@ const ref_height = 800;
 const graphics_mode = 'webgl';
 
 let game_state = void 0;
-let gl = void 0;
 
 function setup() {
-	const canvas = createCanvas(windowWidth, windowHeight, graphics_mode == 'webgl' ? WEBGL : void 0);
-	canvas.style('display', 'block');
-	gl = canvas.GL;
-	//windowResized();
+	windowResized();
 	
 	gui.init();
 	intro.init();
@@ -24,13 +20,14 @@ function windowResized() {
 	let sx = windowWidth / ref_width;
 	let sy = windowHeight / ref_height;
 	global_scale = Math.min(sx, sy);
-	//resizeCanvas(windowWidth, windowHeight);
+	const canvas = createCanvas(windowWidth, windowHeight, graphics_mode == 'webgl' ? WEBGL : void 0);
+	canvas.style('display', 'block');
 }
 
 function draw() {
 	noStroke();
 	translate(-width/2,-height/2,0);
-	//scale(global_scale);
+	scale(global_scale);
 	game_state.draw();
 }
 
