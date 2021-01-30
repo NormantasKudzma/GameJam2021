@@ -11,7 +11,7 @@ const grid = {
 	hit_color: 0,
 	draw: () => {
 		grid.hit_color = Math.max(grid.hit_color - 7, 0);
-		background(37 + grid.hit_color, 19, 7);
+		background(37 + grid.hit_color, 19, 26);
 		grid.tiles.forEach(t => t.draw());
 		gui.draw();
 	},
