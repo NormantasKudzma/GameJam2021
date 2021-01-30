@@ -24,7 +24,9 @@ const grid = {
 	fog_of_war: void 0,
 	is_game_over: false,
 	hit_color: 0,
+	current_frame: 0,
 	draw: () => {
+		++grid.current_frame;
 		grid.hit_color = Math.max(grid.hit_color - 7, 0);
 		background(37 + grid.hit_color, 19, 26);
 		grid.tiles.forEach(t => t.draw());
@@ -84,7 +86,8 @@ function makeTile(content, x, y, my_stats) {
 		let t = {
 			x: x,
 			y: y,
-			fg: makeImage(imgpaths.fg, x * grid.step, y * grid.step),
+			frame_index: 0,
+			fg: imgpaths.fg && imgpaths.fg.map(p => makeImage(p, x * grid.step, y * grid.step)),
 			bg: makeImage(imgpaths.bg, x * grid.step, y * grid.step),
 			draw: () => {
 				if (!t.revealed && draw_fog_of_war) {
@@ -95,7 +98,10 @@ function makeTile(content, x, y, my_stats) {
 					}
 				}
 				if (t.revealed) { t.bg.draw(); }
-				if (t.active && t.revealed) { t.fg.draw(); }
+				if (t.active && t.revealed && t.fg) {
+					if (grid.current_frame % 30 == 0) { t.frame_index = (t.frame_index + 1) % t.fg.length; }
+					t.fg[t.frame_index].draw();
+				}
 			},
 			clicked: (cx, cy) => {
 				if (t.hovered(cx, cy)) {
@@ -138,14 +144,18 @@ function makeTile(content, x, y, my_stats) {
 				return tile({ bg: content.bg }, (me) => {});
 			}
 			case "health": {
-				return tile({ fg: "nor_asset/health.png", bg: content.bg }, (me) => {
+				return tile({ fg: ["nor_asset/health.png"], bg: content.bg }, (me) => {
 					stats.health += 1;
 					stats.health = Math.min(stats.maxHealth, stats.health);
 					me.die();
 				});
 			}
 			case "monster": {
-				const types = [ "nor_asset/Monster1.png", "nor_asset/Monster2.png" ];
+				const types = [
+					["nor_asset/Monster1-1.png", "nor_asset/Monster1-2.png"],
+					["nor_asset/Monster2-1.png", "nor_asset/Monster2-2.png"],
+					["nor_asset/Monster3-1.png", "nor_asset/Monster3-2.png"],
+				];
 				const t = types[(Math.random() * types.length) | 0];
 				return tile({ fg: t, bg: content.bg }, (me) => {
 					stats.health -= me.my_stats.dmg;
@@ -159,7 +169,7 @@ function makeTile(content, x, y, my_stats) {
 				});
 			}
 			case "exit": {
-				return tile({ fg: "nor_asset/exit.png", bg: content.bg }, (me) => {
+				return tile({ fg: ["nor_asset/exit.png"], bg: content.bg }, (me) => {
 					level_nr++;
 					do_the_map_thing();
 				});
