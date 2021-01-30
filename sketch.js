@@ -1,9 +1,11 @@
-let last = 0;
+let global_scale = 1;
+const ref_width = 800;
+const ref_height = 800;
 
 function setup() {
 	const canvas = createCanvas(windowWidth, windowHeight);
 	canvas.style('display', 'block');
-	last = Date.now();
+	windowResized();
 	
 	grid.init();
 	
@@ -20,24 +22,21 @@ function setup() {
 }
 
 function windowResized() {
+	let sx = windowWidth / ref_width;
+	let sy = windowHeight / ref_height;
+	global_scale = Math.min(sx, sy);
 	resizeCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
-	const now = Date.now();
-	const dt = (now - last) / 1000;
-	last = now;
-	
 	background(255);
 	
-	//translate(windowWidth/2, windowHeight/2);
-	text("hello, this is working", 0, 0);
-	
+	scale(global_scale);
 	grid.draw();
 }
 
 function mouseClicked() {
-	grid.clicked(mouseX, mouseY);
+	grid.clicked(mouseX / global_scale, mouseY / global_scale);
 } 
 
 // monstra
