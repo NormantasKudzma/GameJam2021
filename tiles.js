@@ -4,17 +4,34 @@ const draw_fog_of_war = true;
 const fog_only_neighbours = true;
 
 const hero = {
-	img: void 0,
+	frame_index: 0,
+	imgs: void 0,
+	img_weak: void 0,
+	img_strong: void 0,
 	init: () => {
-		if (!hero.img) { hero.img = makeImage("nor_asset/Hyro.png", 0, 0); }
+		if (!hero.imgs) {
+			hero.img_weak = [ makeImage("nor_asset/Hyro-1.png", 0, 0), makeImage("nor_asset/Hyro-2.png", 0, 0) ];
+			hero.img_strong = [ makeImage("nor_asset/Hyro_cool_1.png", 0, 0), makeImage("nor_asset/Hyro_cool_2.png", 0, 0) ] ;
+		}
+		hero.imgs = hero.img_weak;
 		hero.move(0, 0);
 	},
 	move: (x, y) => {
-		hero.img.x = x * grid.step;
-		hero.img.y = y * grid.step;
+		hero.img_weak.forEach(i => {
+			i.x = x * grid.step;
+			i.y = y * grid.step;
+		});
+		hero.img_strong.forEach(i => {
+			i.x = x * grid.step;
+			i.y = y * grid.step;
+		});
 	},
 	draw: () => {
-		hero.img.draw();
+		if (grid.current_frame % 30 == 0) { hero.frame_index = (hero.frame_index + 1) % hero.imgs.length; }
+		hero.imgs[hero.frame_index].draw();
+	},
+	upgrade: () => {
+		hero.imgs = hero.img_strong;
 	}
 }
 
@@ -30,7 +47,7 @@ const grid = {
 		++grid.current_frame;
 		grid.hit_color = Math.max(grid.hit_color - 7, 0);
 		background(37 + grid.hit_color, 19, 26);
-
+		
 		texture(grid.background);
 		const u = 1 + width / grid.background.width;
 		const v = 1 + height / grid.background.height;
@@ -85,6 +102,7 @@ const grid = {
 		grid.tiles = [];
 		hero.init();
 		stats.maxHealth = stats.initHealth;
+		stats.dmg = stats.initDmg;
 		gui.init();
 	},
 	gameover: () => {
@@ -119,7 +137,7 @@ function makeTile(content, x, y, my_stats) {
 					if (grid.current_frame % 30 == 0) { t.frame_index = (t.frame_index + 1) % t.fg.length; }
 					t.fg[t.frame_index].draw();
 					
-					for (let i = 0; my_stats.health && i < my_stats.health; ++i) {
+					for (let i = 0; my_stats && i < my_stats.health | 0; ++i) {
 						t.hearts_full[i].draw();
 					}
 				}
@@ -240,6 +258,13 @@ function makeTile(content, x, y, my_stats) {
 					stats.maxHealth += 1;
 					me.die();
 					gui.init();
+				});
+			}
+			case "trident": {
+				return tile({ fg: ["nor_asset/trident.png"], bg: content.bg }, (me) => {
+					stats.dmg += 1;
+					me.die();
+					hero.upgrade();
 				});
 			}
 			default: {

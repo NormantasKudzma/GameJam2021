@@ -8,6 +8,7 @@ const TILE_MONSTER_STRONG = 6;
 const TILE_HEALTH_POT2 = 7;
 const TILE_POISON = 8;
 const TILE_HEART = 9;
+const TILE_TRIDENT = 10;
 
 const dimensions = 10;
 const number_of_rooms = 20;
@@ -75,7 +76,7 @@ function getLevel(isRandom, nr) {
 	} else switch (nr) {
 		case 1:
 			level = [//  1  2  3  4  5  6  7  8
-				/*1*/	[1, 1, 2, 1, 0, 0, 0, 0],
+				/*1*/	[1, 10, 2, 1, 0, 0, 0, 0],
 				/*2*/	[0, 1, 0, 3, 0, 0, 0, 0],
 				/*3*/	[0, 2, 2, 1, 0, 0, 0, 0],
 				/*4*/	[0, 1, 0, 2, 2, 1, 0, 0],
@@ -154,7 +155,7 @@ function do_the_map_thing() {
 	};
 	
 	const what_is_that = (num) => {
-		const types = [ void 0, "empty", "monster", "health", "exit", "quest", "monster_blu", "health2", "poison", "heart" ];
+		const types = [ void 0, "empty", "monster", "health", "exit", "quest", "monster_blu", "health2", "poison", "heart", "trident" ];
 		const t = types[num | 0];
 		let s = void 0;
 		if (t == "monster") { s = { "dmg": 1, "health": 1 }; }
