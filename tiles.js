@@ -3,6 +3,21 @@ const draw_fog_of_war = true;
 // Only draw fog of war on unrevealed neighbours
 const fog_only_neighbours = true;
 
+const hero = {
+	img: void 0,
+	init: () => {
+		if (!hero.img) { hero.img = makeImage("nor_asset/Hyro.png", 0, 0); }
+		hero.move(0, 0);
+	},
+	move: (x, y) => {
+		hero.img.x = x * grid.step;
+		hero.img.y = y * grid.step;
+	},
+	draw: () => {
+		hero.img.draw();
+	}
+}
+
 const grid = {
 	step: 80,
 	tiles: [],
@@ -13,6 +28,7 @@ const grid = {
 		grid.hit_color = Math.max(grid.hit_color - 7, 0);
 		background(37 + grid.hit_color, 19, 26);
 		grid.tiles.forEach(t => t.draw());
+		hero.draw();
 		gui.draw();
 	},
 	clicked: (x, y) => {
@@ -31,6 +47,7 @@ const grid = {
 	},
 	init: () => {
 		grid.fog_of_war = loadImage("nor_asset/fog.png");
+		grid.clear();
 	},
 	find: (x, y) => {
 		return grid.tiles.find(t => t.x == x && t.y == y);
@@ -51,6 +68,7 @@ const grid = {
 		grid.is_game_over = false;
 		grid.hit_color = 0;
 		grid.tiles = [];
+		hero.init();
 	},
 	gameover: () => {
 		console.log("Game over, stub");
@@ -82,11 +100,14 @@ function makeTile(content, x, y, my_stats) {
 			clicked: (cx, cy) => {
 				if (t.hovered(cx, cy)) {
 					console.log(`Clicked: ${content.type}`);
-					click(t);
+					//const revealed_neighbour = t.neighbours.find(n => n.revealed && !n.active);
+					//if (revealed_neighbour) { hero.move(revealed_neighbour.x, revealed_neighbour.y); }
+					hero.move(t.x, t.y);
+					if (t.active) { click(t); } 
 				}
 			},
 			hovered: (cx, cy) => {
-				return t.revealed && t.active && t.bg.contains(cx, cy);
+				return t.revealed && t.bg.contains(cx, cy);
 			},
 			active: false,
 			revealed: false,
