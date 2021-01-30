@@ -29,3 +29,7 @@ function draw() {
 function mouseClicked() {
 	grid.clicked(mouseX / global_scale, mouseY / global_scale);
 }
+
+function mouseMoved() { 
+    grid.hover(mouseX / global_scale, mouseY / global_scale);
+} 

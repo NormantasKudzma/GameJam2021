@@ -13,6 +13,15 @@ const grid = {
 	clicked: (x, y) => {
 		grid.tiles.forEach(t => t.clicked(x, y));
 	},
+	last_hovered: void 0,
+	hover: (x, y) => {
+		const new_hovered = grid.tiles.find(t => t.hovered(x, y));
+		if (new_hovered != grid.last_hovered) {
+			if (grid.last_hovered) { grid.last_hovered.highlight(false); }
+			if (new_hovered) { new_hovered.highlight(true); }
+			grid.last_hovered = new_hovered;
+		}
+	},
 	init: () => {
 		grid.fog_of_war = loadImage("nor_asset/fog.png");
 	},
@@ -54,19 +63,26 @@ function makeTile(content, x, y, my_stats) {
 				if (t.active && t.revealed) { t.fg.draw(); }
 			},
 			clicked: (cx, cy) => {
-				if (t.revealed && t.active && t.bg.contains(cx, cy)) {
+				if (t.hovered(cx, cy)) {
 					console.log(`Clicked: ${content.type}`);
 					click(t);
 				}
+			},
+			hovered: (cx, cy) => {
+				return t.revealed && t.active && t.bg.contains(cx, cy);
 			},
 			active: false,
 			revealed: false,
 			die: () => {
 				t.active = false;
+				t.highlight(false);
 				grid.neighbours_of(t.x, t.y).forEach(n => n.reveal());
 			},
 			reveal: () => {
 				t.revealed = true;
+			},
+			highlight: (on) => {
+				t.bg.highlight(on);
 			},
 			my_stats: my_stats,
 			neighbours: [],
