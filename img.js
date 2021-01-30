@@ -3,7 +3,11 @@ const img = void 0;
 const img_cache = {};
 const mouseover_tint = [190, 250, 190];
 
+let draw_img = void 0;
+
 function makeImage(path, x, y){
+	if (!draw_img) { draw_img = graphics_mode == 'webgl' ? texture : image; }
+
 	const img = {
 		x: x,
 		y: y,
@@ -11,9 +15,11 @@ function makeImage(path, x, y){
 		draw: () => {
 			const tex = img_cache[path];
 			if (tex && tex.tex) {
-				if (img.tint) { tint(mouseover_tint[0], mouseover_tint[1], mouseover_tint[2]); }
-				image(tex.tex, x, y);
-				noTint();
+				//if (img.tint) { tint(mouseover_tint[0], mouseover_tint[1], mouseover_tint[2]); }
+				//image(tex.tex, x, y);
+				texture(tex.tex);
+				rect(img.x, img.y, tex.w, tex.h);
+				//if (img.tint) { noTint(); }
 			}
 		},
 		contains: (cx, cy) => {
