@@ -40,7 +40,8 @@ function CanPlaceRoom(level, x, y) {
 function getLevel() {
 	let level = Array(dimensions).fill().map(() => Array(dimensions).fill(0));
 	level[0][0] = TILE_ALIVE;
-	for (var i = 0; i < number_of_rooms; i++)
+	let rooms_created = 0;
+	while (rooms_created < number_of_rooms) {
 		let level_x = []
 		let level_y = []
 		let tiles_created = 0
@@ -55,6 +56,7 @@ function getLevel() {
 		}
 		const selected_tile = Math.floor((Math.random() * tiles_created));
 		level[level_x[selected_tile]][level_y[selected_tile]] = TILE_ALIVE;
+		rooms_created++;
 	}
 	return level;
 }
