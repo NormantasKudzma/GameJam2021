@@ -37,7 +37,7 @@ const grid = {
 	}
 };
 
-function makeTile(type, x, y, my_stats) {
+function makeTile(content, x, y, my_stats) {
 	const tile = (imgpaths, click) => {
 		let t = {
 			x: x,
@@ -51,7 +51,7 @@ function makeTile(type, x, y, my_stats) {
 			},
 			clicked: (cx, cy) => {
 				if (t.revealed && t.active && t.bg.contains(cx, cy)) {
-					console.log(`Clicked: ${type}`);
+					console.log(`Clicked: ${content.type}`);
 					click(t);
 				}
 			},
@@ -72,18 +72,15 @@ function makeTile(type, x, y, my_stats) {
 	}
 	
 	let t = (() => {
-		switch (type){
-			case "empty": {
-				return tile({}, () => {})
-			}
+		switch (content.type){
 			case "health": {
-				return tile({ fg: "nor_asset/health.png", bg: "nor_asset/Tile.png" }, (me) => {
+				return tile({ fg: "nor_asset/health.png", bg: content.bg }, (me) => {
 					stats.health += stats.maxHealth;
 					me.die();
 				})
 			}
 			case "monster": {
-				return tile({ fg: "nor_asset/bad.png", bg: "nor_asset/Tile.png" }, (me) => {
+				return tile({ fg: "nor_asset/bad.png", bg: content.bg }, (me) => {
 					stats.health -= me.my_stats.dmg;
 					stats.health = Math.max(0, stats.health);
 					if (stats.health <= 0) { console.log("Stub, gameover maybe"); }

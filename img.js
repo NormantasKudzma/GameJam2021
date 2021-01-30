@@ -1,25 +1,27 @@
 /** You no touch this okay */
 const img = void 0;
+const img_cache = {};
 
 function makeImage(path, x, y){
 	const img = {
-		tex: void 0,
-		w: 0,
-		h: 0,
 		x: x,
 		y: y,
 		draw: () => {
-			if (img.tex) { image(img.tex, x, y); }
+			const tex = img_cache[path];
+			if (tex.tex) { image(tex.tex, x, y); }
 		},
 		contains: (cx, cy) => {
-			return cx >= img.x && cx <= img.x + img.w && cy >= img.y && cy <= img.y + img.h;
+			const tex = img_cache[path];
+			return tex && cx >= img.x && cx <= img.x + tex.w && cy >= img.y && cy <= img.y + tex.h;
 		}
 	};
 	
-	img.tex = path && loadImage(path, tex => {
-		img.w = tex.width;
-		img.h = tex.height;
-	});
+	if (path && !img_cache[path]) {
+		img_cache[path] = {};
+		loadImage(path, tex => {
+			img_cache[path] = { tex: tex, w: tex.width, h: tex.height };
+		});
+	}
 	
 	return img;
 }
