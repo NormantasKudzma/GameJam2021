@@ -4,6 +4,7 @@ const ref_height = 800;
 const graphics_mode = 'webgl';
 
 let game_state = void 0;
+let gl = void 0;
 
 function setup() {
 	windowResized();
@@ -22,6 +23,7 @@ function windowResized() {
 	global_scale = Math.min(sx, sy);
 	const canvas = createCanvas(windowWidth, windowHeight, graphics_mode == 'webgl' ? WEBGL : void 0);
 	canvas.style('display', 'block');
+	gl = canvas.GL;
 }
 
 function draw() {
