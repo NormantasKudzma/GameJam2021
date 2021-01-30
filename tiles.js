@@ -71,7 +71,10 @@ function makeTile(content, x, y, my_stats) {
 			draw: () => {
 				if (!t.revealed && draw_fog_of_war) {
 					const draw_fog = !fog_only_neighbours || t.neighbours.find(n => n.revealed);
-					if (draw_fog) { image(grid.fog_of_war, t.bg.x, t.bg.y); }
+					if (draw_fog) {
+						texture(grid.fog_of_war);
+						rect(t.bg.x, t.bg.y, 80, 80);
+					}
 				}
 				if (t.revealed) { t.bg.draw(); }
 				if (t.active && t.revealed) { t.fg.draw(); }

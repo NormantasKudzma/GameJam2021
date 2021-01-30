@@ -11,9 +11,11 @@ function makeImage(path, x, y){
 		draw: () => {
 			const tex = img_cache[path];
 			if (tex && tex.tex) {
+				//image(tex.tex, x, y);
 				if (img.tint) { tint(mouseover_tint[0], mouseover_tint[1], mouseover_tint[2]); }
-				image(tex.tex, x, y);
-				noTint();
+				texture(tex.tex);
+				rect(img.x, img.y, tex.w, tex.h);
+				if (img.tint) { tint(255, 255, 255); }
 			}
 		},
 		contains: (cx, cy) => {
@@ -29,6 +31,9 @@ function makeImage(path, x, y){
 	if (path && !img_cache[path]) {
 		img_cache[path] = {};
 		loadImage(path, tex => {
+			/*gl.bindTexture(gl.TEXTURE_2D, tex);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);*/
 			img_cache[path] = { tex: tex, w: tex.width, h: tex.height };
 		});
 	}
