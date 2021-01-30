@@ -1,11 +1,11 @@
-const gameover = {
+const quest_completed = {
 	img: void 0,
 	init: () => {
-		gameover.img = makeImage("nor_asset/gameover.png", 128, 128);
+		quest_completed.img = makeImage("nor_asset/win.png", 128, 128);
 	},
 	draw: () => {
 		background(255);
-		gameover.img.draw();
+		quest_completed.img.draw();
 	},
 	clicked: (cx, cy) => {
 		level_nr = 1;

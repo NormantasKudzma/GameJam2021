@@ -8,6 +8,8 @@ const TILE_QUEST = 5;
 const dimensions = 10;
 const number_of_rooms = 20;
 
+let level_nr = 1;
+
 function TileInDungeon(level, x, y) {
 	if (x < 0 || x >= dimensions || y < 0 || y >= dimensions) {
 		return false;
@@ -42,34 +44,55 @@ function CanPlaceRoom(level, x, y) {
 	return false;
 }
 
-function getLevel() {
-	let level = Array(dimensions).fill().map(() => Array(dimensions).fill(0));
-	level[0][0] = TILE_EMPTY;
-	let rooms_created = 0;
-	while (rooms_created < number_of_rooms) {
-		let level_x = []
-		let level_y = []
-		let tiles_created = 0
-		for (var x = 0; x < dimensions; x++) {
-			for (var y = 0; y < dimensions; y++) {
-				if (CanPlaceRoom(level, x, y)) {
-					level_x[tiles_created] = x
-					level_y[tiles_created] = y
-					tiles_created++
+function getLevel(isRandom, nr) {
+	let level;
+	if (isRandom) {
+		level = Array(dimensions).fill().map(() => Array(dimensions).fill(0));
+		level[0][0] = TILE_EMPTY;
+		let rooms_created = 0;
+		while (rooms_created < number_of_rooms) {
+			let level_x = []
+			let level_y = []
+			let tiles_created = 0
+			for (var x = 0; x < dimensions; x++) {
+				for (var y = 0; y < dimensions; y++) {
+					if (CanPlaceRoom(level, x, y)) {
+						level_x[tiles_created] = x
+						level_y[tiles_created] = y
+						tiles_created++
+					}
 				}
 			}
+			const selected_tile = Math.floor((Math.random() * tiles_created));
+			level[level_x[selected_tile]][level_y[selected_tile]] = Math.round(1 + Math.random() * 2);
+			rooms_created++;
 		}
-		const selected_tile = Math.floor((Math.random() * tiles_created));
-		level[level_x[selected_tile]][level_y[selected_tile]] = Math.round(1 + Math.random() * 2);
-		rooms_created++;
+
+	} else if (nr == 1) {
+	/*level 1*/
+		level = [
+	/*1*/	[TILE_EMPTY, TILE_EMPTY, TILE_MONSTER, TILE_EMPTY, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE],
+	/*2*/	[TILE_NO_TILE, TILE_EMPTY, TILE_NO_TILE, TILE_HEALTH_POT, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE],
+	/*3*/	[TILE_NO_TILE, TILE_MONSTER, TILE_MONSTER, TILE_EMPTY, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE],
+	/*4*/	[TILE_NO_TILE, TILE_EMPTY, TILE_NO_TILE, TILE_MONSTER, TILE_MONSTER, TILE_EMPTY, TILE_NO_TILE, TILE_NO_TILE],
+	/*5*/	[TILE_HEALTH_POT, TILE_EMPTY, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_HEALTH_POT, TILE_NO_TILE, TILE_NO_TILE],
+	/*6*/	[TILE_HEALTH_POT, TILE_NO_TILE, TILE_NO_TILE, TILE_MONSTER, TILE_HEALTH_POT, TILE_EMPTY, TILE_NO_TILE, TILE_NO_TILE],
+	/*7*/	[TILE_NO_TILE, TILE_NO_TILE, TILE_HEALTH_POT, TILE_HEALTH_POT, TILE_NO_TILE, TILE_MONSTER, TILE_MONSTER, TILE_EMPTY],
+	/*8*/	[TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_NO_TILE, TILE_EXIT]
+		];
+	} else if (nr == 2) {
+		level = [
+			[ TILE_EMPTY ]
+		];
 	}
+
 	return level;
 }
 
 function do_the_map_thing() {
 	grid.clear();
 	
-	const level = getLevel();
+	const level = getLevel(false, level_nr);
 	
 	const neighbours_to_tile = {
 		"0100": "nor_asset/tiles/one_down.png",
