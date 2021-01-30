@@ -1,5 +1,9 @@
-const TILE_ALIVE = 1;
-const TILE_DEAD = 0;
+const TILE_NO_TILE = 0;
+const TILE_EMPTY = 1;
+const TILE_MONSTER = 2;
+const TILE_HEALTH_POT = 3;
+const TILE_EXIT = 4;
+
 const dimensions = 10;
 const number_of_rooms = 20;
 
@@ -11,26 +15,26 @@ function TileInDungeon(level, x, y) {
 }
 
 function CanPlaceRoom(level, x, y) {
-	if (level[x][y] == TILE_ALIVE) {
+	if (level[x][y] > TILE_NO_TILE) {
 		return false;
 	}
 	if (TileInDungeon(level, x - 1, y)) {
-		if (level[x - 1][y] == TILE_ALIVE) {
+		if (level[x - 1][y] > TILE_NO_TILE) {
 			return true;
 		}
 	}
 	if (TileInDungeon(level, x + 1, y)) {
-		if (level[x + 1][y] == TILE_ALIVE) {
+		if (level[x + 1][y] > TILE_NO_TILE) {
 			return true;
 		}
 	}
 	if (TileInDungeon(level, x, y + 1)) {
-        if (level[x][y + 1] == TILE_ALIVE) {
+        if (level[x][y + 1] > TILE_NO_TILE) {
 			return true;
 		}
 	}
 	if (TileInDungeon(level, x, y - 1)) {
-        if (level[x][y - 1] == TILE_ALIVE) {
+        if (level[x][y - 1] > TILE_NO_TILE) {
 			return true;
 		}
 	}
@@ -39,7 +43,7 @@ function CanPlaceRoom(level, x, y) {
 
 function getLevel() {
 	let level = Array(dimensions).fill().map(() => Array(dimensions).fill(0));
-	level[0][0] = TILE_ALIVE;
+	level[0][0] = TILE_EMPTY;
 	let rooms_created = 0;
 	while (rooms_created < number_of_rooms) {
 		let level_x = []
@@ -55,7 +59,7 @@ function getLevel() {
 			}
 		}
 		const selected_tile = Math.floor((Math.random() * tiles_created));
-		level[level_x[selected_tile]][level_y[selected_tile]] = TILE_ALIVE;
+		level[level_x[selected_tile]][level_y[selected_tile]] = Math.round(1 + Math.random() * 2);
 		rooms_created++;
 	}
 	return level;
@@ -93,22 +97,22 @@ function do_the_map_thing() {
 			y < level.length - 1 && level[y + 1][x],
 			x > 0 && level[y][x - 1],
 			x < level[y].length - 1 && level[y][x + 1],
-		].map(x => x | 0);
+		].map(x => (x | 0) ? 1 : 0);
 	};
 	
-	const randomType = () => {
-		const types = [ "health", "empty", "monster" ];
-		const t = types[(Math.random() * types.length) | 0];
+	const what_is_that = (num) => {
+		const types = [ void 0, "empty", "monster", "health", "exit" ];
+		const t = types[num | 0];
 		const s = t == "monster" ? { "dmg": 1, "health": 1 } : void 0;
 		return { type: t, stats: s };
 	};
 	
 	for (let y = 0; y < level.length; ++y) {
 		for (let x = 0; x < level[y].length; ++x) {
-			if (level[y][x] == 0) { continue; }
+			if (level[y][x] == TILE_NO_TILE) { continue; }
 			
 			const bg = neighbours_to_tile[neighbours_of(x, y).join("")];
-			const what = randomType();
+			const what = what_is_that(level[y][x]);
 			makeTile({ "type": what.type, "bg": bg }, x, y, what.stats);
 		}
 	}
