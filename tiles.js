@@ -30,7 +30,7 @@ const grid = {
 		++grid.current_frame;
 		grid.hit_color = Math.max(grid.hit_color - 7, 0);
 		background(37 + grid.hit_color, 19, 26);
-		
+
 		texture(grid.background);
 		const u = 1 + width / grid.background.width;
 		const v = 1 + height / grid.background.height;
@@ -105,6 +105,7 @@ function makeTile(content, x, y, my_stats) {
 			hearts_full: [],
 			fg: imgpaths.fg && imgpaths.fg.map(p => makeImage(p, x * grid.step, y * grid.step)),
 			bg: makeImage(imgpaths.bg, x * grid.step, y * grid.step),
+			monster_sound: makeSound(imgpaths.sound),
 			draw: () => {
 				if (!t.revealed && draw_fog_of_war) {
 					const draw_fog = !fog_only_neighbours || t.neighbours.find(n => n.revealed);
@@ -172,6 +173,7 @@ function makeTile(content, x, y, my_stats) {
 					stats.health += my_stats.heal;
 					stats.health = Math.min(stats.maxHealth, stats.health);
 					me.die();
+					console.log(" *** health die *** ");
 				});
 			}
 			case "poison":
@@ -181,18 +183,36 @@ function makeTile(content, x, y, my_stats) {
 					["nor_asset/Monster1-1.png", "nor_asset/Monster1-2.png"],
 					["nor_asset/Monster2-1.png", "nor_asset/Monster2-2.png"],
 				];
-				let t = types[(Math.random() * types.length) | 0];
-				if (content.type == "monster_blu") { t = ["nor_asset/Monster3-1.png", "nor_asset/Monster3-2.png"]; }
-				if (content.type == "poison") { t = ["nor_asset/poison.png"]; }
-				
-				const monster = tile({ fg: t, bg: content.bg }, (me) => {
+				const sounds = [
+					"nor_asset/sounds/monster_die_1",
+					"nor_asset/sounds/monster_die_2",
+				];
+				const index = (Math.random() * types.length) | 0;
+				let t = types[index];
+				let s = sounds[index];
+				if (content.type == "monster_blu") {
+					t = ["nor_asset/Monster3-1.png", "nor_asset/Monster3-2.png"];
+					s = "nor_asset/sounds/monster_die_3";
+				}
+				if (content.type == "poison") {
+					t = ["nor_asset/poison.png"];
+					s = "nor_asset/sounds/monster_die_3";
+				}
+
+				const monster = tile({ fg: t, bg: content.bg, sound: s }, (me) => {
 					stats.health -= me.my_stats.dmg;
 					stats.health = Math.max(0, stats.health);
 					if (stats.health <= 0) { game_state = gameover; }
 					
 					me.my_stats.health -= stats.dmg;
-					if (me.my_stats.health <= 0) { me.die(); }
-					
+					if (me.my_stats.health <= 0) {
+						if (me.monster_sound) { 
+							console.log(" *** sound *** ");
+							me.monster_sound.play();
+						}
+						console.log(" *** monster die *** ");
+						me.die();
+					}
 					grid.onhit();
 				});
 				
