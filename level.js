@@ -37,31 +37,25 @@ function CanPlaceRoom(level, x, y) {
 	return false;
 }
 
-function ShouldPlace() {
-	return Math.floor((Math.random() * 100) + 1) <= 33;
-}
-
 function getLevel() {
 	let level = Array(dimensions).fill().map(() => Array(dimensions).fill(0));
 	level[0][0] = TILE_ALIVE;
 	let rooms_created = 0;
 	while (rooms_created < number_of_rooms) {
-		var tile_created = false;
+		let level_x = []
+		let level_y = []
+		let tiles_created = 0
 		for (var x = 0; x < dimensions; x++) {
 			for (var y = 0; y < dimensions; y++) {
-				if (CanPlaceRoom(level, x, y) && ShouldPlace()) {
-					level[x][y] = TILE_ALIVE;
-					rooms_created++;
-                    tile_created = true;
+				if (CanPlaceRoom(level, x, y)) {
+					level_x[tiles_created] = x
+					level_y[tiles_created] = y
+					tiles_created++
 				}
-				if (tile_created) {
-					break;
-				}
-			}
-			if (tile_created) {
-				break;
 			}
 		}
+		const selected_tile = Math.floor((Math.random() * tiles_created));
+		level[level_x[selected_tile]][level_y[selected_tile]] = TILE_ALIVE;
 	}
 	return level;
 }
