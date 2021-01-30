@@ -7,7 +7,7 @@ function setup() {
 	
 	grid.init();
 	
-	for (let i = 0; i < 5; ++i) {
+	/*for (let i = 0; i < 5; ++i) {
 		for (let j = 0; j < 5; ++j) {
 			makeTile("monster", i, j, { "dmg": 5, "health": 15 });
 		}
@@ -15,7 +15,8 @@ function setup() {
 	makeTile("empty", 6, 3);
 	makeTile("health", 6, 6);
 	
-	grid.reveal(0, 0);
+	grid.reveal(0, 0);*/
+	do_the_map_thing();
 }
 
 function windowResized() {

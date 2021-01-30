@@ -3,7 +3,7 @@ const real =  { /**/ "not": 2.69 };
 const draw_fog_of_war = true;
 
 const grid = {
-	step: 69,
+	step: 80,
 	tiles: [],
 	fog_of_war: void 0,
 	draw: () => {
@@ -31,6 +31,9 @@ const grid = {
 		];
 		r = r.filter(n => n);
 		return r;
+	},
+	clear: () => {
+		grid.tiles = [];
 	}
 };
 
@@ -74,13 +77,13 @@ function makeTile(type, x, y, my_stats) {
 				return tile({}, () => {})
 			}
 			case "health": {
-				return tile({ fg: "nor_asset/health.png", bg: "nor_asset/health_bg.png" }, (me) => {
+				return tile({ fg: "nor_asset/health.png", bg: "nor_asset/Tile.png" }, (me) => {
 					stats.health += stats.maxHealth;
 					me.die();
 				})
 			}
 			case "monster": {
-				return tile({ fg: "nor_asset/bad.png", bg: "nor_asset/bad_bg.png" }, (me) => {
+				return tile({ fg: "nor_asset/bad.png", bg: "nor_asset/Tile.png" }, (me) => {
 					stats.health -= me.my_stats.dmg;
 					stats.health = Math.max(0, stats.health);
 					if (stats.health <= 0) { console.log("Stub, gameover maybe"); }
