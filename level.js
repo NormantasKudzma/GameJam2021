@@ -150,7 +150,7 @@ function do_the_map_thing() {
 	};
 	
 	const what_is_that = (num) => {
-		const types = [ void 0, "empty", "monster", "health", "exit" ];
+		const types = [ void 0, "empty", "monster", "health", "exit", "quest" ];
 		const t = types[num | 0];
 		const s = t == "monster" ? { "dmg": 1, "health": 1 } : void 0;
 		return { type: t, stats: s };

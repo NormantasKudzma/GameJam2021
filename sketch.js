@@ -24,10 +24,10 @@ function windowResized() {
 	const canvas = createCanvas(windowWidth, windowHeight, graphics_mode == 'webgl' ? WEBGL : void 0);
 	canvas.style('display', 'block');
 	gl = canvas.GL;
+	noStroke();
 }
 
 function draw() {
-	noStroke();
 	translate(-width/2,-height/2,0);
 	scale(global_scale);
 	game_state.draw();
