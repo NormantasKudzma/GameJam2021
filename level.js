@@ -24,13 +24,13 @@ function CanPlaceRoom(level, x, y) {
 			return true;
 		}
 	}
-	if (TileInDungeon(level, x - 1, y)) {
+	if (TileInDungeon(level, x, y + 1)) {
         if (level[x][y + 1] == TILE_ALIVE) {
 			return true;
 		}
 	}
-	if (TileInDungeon(level, x + 1, y)) {
-        if (level[x][y + 1] == TILE_ALIVE) {
+	if (TileInDungeon(level, x, y - 1)) {
+        if (level[x][y - 1] == TILE_ALIVE) {
 			return true;
 		}
 	}
