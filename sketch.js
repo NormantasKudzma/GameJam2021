@@ -28,7 +28,7 @@ function windowResized() {
 }
 
 function draw() {
-	translate(-width/2,-height/2,0);
+	translate(-width/2, -height/2, 0);
 	scale(global_scale);
 	game_state.draw();
 }

@@ -43,7 +43,10 @@ const grid = {
 	is_game_over: false,
 	hit_color: 0,
 	current_frame: 0,
+	tx: 0,
 	draw: () => {
+		translate(grid.tx, 0, 0);
+		
 		++grid.current_frame;
 		grid.hit_color = Math.max(grid.hit_color - 7, 0);
 		background(37 + grid.hit_color, 19, 26);
@@ -53,7 +56,7 @@ const grid = {
 		const v = 1 + height / grid.background.height;
 		for (let i = 0; i < v; ++i) {
 			for (let j = 0; j < u; ++j) {
-				rect(j * grid.background.width, i * grid.background.height, grid.background.width, grid.background.height);
+				rect((j - 2) * grid.background.width, i * grid.background.height, grid.background.width, grid.background.height);
 			}
 		}
 
@@ -63,11 +66,13 @@ const grid = {
 		gui.draw();
 	},
 	clicked: (x, y) => {
+		x -= grid.tx;
 		if (grid.is_game_over) { return; }
 		grid.tiles.forEach(t => t.clicked(x, y));
 	},
 	last_hovered: void 0,
 	hover: (x, y) => {
+		x -= grid.tx;
 		if (grid.is_game_over) { return; }
 		const new_hovered = grid.tiles.find(t => t.hovered(x, y));
 		if (new_hovered != grid.last_hovered) {
@@ -145,13 +150,23 @@ function makeTile(content, x, y, my_stats) {
 			clicked: (cx, cy) => {
 				if (t.hovered(cx, cy)) {
 					console.log(`Clicked: ${content.type}`);
+					const bro_what_level = level_nr;
 					if (t.active) { click(t); } 
-					if (!t.active) {
-						hero.move(t.x, t.y);
-					}
-					else {
-						const revealed_neighbour = t.neighbours.find(n => n.revealed && !n.active);
-						if (revealed_neighbour) { hero.move(revealed_neighbour.x, revealed_neighbour.y); }
+					
+					/**
+					* This be workaround for when you climb ladder
+					* Im lazy now to fix it, so dont move anything around
+					* And may god be with you if you do decide to understand this
+					* hot garbage
+					*/
+					if (bro_what_level == level_nr) {
+						if (!t.active) {
+							hero.move(t.x, t.y);
+						}
+						else {
+							const revealed_neighbour = t.neighbours.find(n => n.revealed && !n.active);
+							if (revealed_neighbour) { hero.move(revealed_neighbour.x, revealed_neighbour.y); }
+						}
 					}
 				}
 			},
@@ -248,6 +263,7 @@ function makeTile(content, x, y, my_stats) {
 				return tile({ fg: ["nor_asset/exit.png"], bg: content.bg }, (me) => {
 					level_nr++;
 					do_the_map_thing();
+					hero.move(0, 0);
 				});
 			}
 			case "quest": {
