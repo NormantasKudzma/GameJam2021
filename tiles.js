@@ -32,7 +32,19 @@ const grid = {
 		background(37 + grid.hit_color, 19, 26);
 		
 		texture(grid.background);
-		rect(0, 0, width, height, 10, 10);
+		//rect(0, 0, width, height, 10, 10);
+		//image(grid.background, 0, 0, width / 4, height / 4, 0, 0, width, height);
+
+		let u = width / grid.background.width;
+		let v = height / grid.background.height;
+		textureWrap(REPEAT);
+		textureMode(NORMAL);
+		beginShape();
+		vertex(0, 0, 0, 0);
+		vertex(width, 0, u, 0);
+		vertex(width, height, u, v);
+		vertex(0, height, 0, v);
+		endShape();
 		
 		grid.tiles.forEach(t => t.draw());
 		hero.draw();
