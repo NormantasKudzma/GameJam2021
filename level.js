@@ -3,6 +3,7 @@ const TILE_EMPTY = 1;
 const TILE_MONSTER = 2;
 const TILE_HEALTH_POT = 3;
 const TILE_EXIT = 4;
+const TILE_QUEST = 5;
 
 const dimensions = 10;
 const number_of_rooms = 20;

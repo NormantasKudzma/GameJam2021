@@ -109,7 +109,7 @@ function makeTile(content, x, y, my_stats) {
 				return tile({ fg: "nor_asset/health.png", bg: content.bg }, (me) => {
 					stats.health = stats.maxHealth;
 					me.die();
-				})
+				});
 			}
 			case "monster": {
 				const types = [ "nor_asset/Monster1.png", "nor_asset/Monster2.png" ];
@@ -121,13 +121,18 @@ function makeTile(content, x, y, my_stats) {
 					
 					me.my_stats.health -= stats.dmg;
 					if (me.my_stats.health <= 0) { me.die(); }
-				})
+				});
 			}
 			case "exit": {
 				return tile({ fg: "nor_asset/exit.png", bg: content.bg }, (me) => {
 					grid.clear();
 					do_the_map_thing();
-				})
+				});
+			}
+			case "quest": {
+				return tile({ fg: "nor_asset/goal1.png", bg: content.bg }, (me) => {
+					console.log("stub, picked up quest item");
+				});
 			}
 			default: {
 				console.error("no, don't");
