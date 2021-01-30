@@ -154,6 +154,9 @@ function do_the_map_thing() {
 	
 	grid.tiles.forEach(t => t.neighbours = grid.neighbours_of(t.x, t.y));
 	
+	const maxX = grid.tiles.sort((a, b) => { return b.x - a.x; })[0].x;
+	grid.tx = (maxX / 4) * grid.step;
+	
 	// stub
 	grid.reveal(0, 0);
 }
