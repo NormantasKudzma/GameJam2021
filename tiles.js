@@ -102,6 +102,7 @@ function makeTile(content, x, y, my_stats) {
 			x: x,
 			y: y,
 			frame_index: 0,
+			hearts_full: [],
 			fg: imgpaths.fg && imgpaths.fg.map(p => makeImage(p, x * grid.step, y * grid.step)),
 			bg: makeImage(imgpaths.bg, x * grid.step, y * grid.step),
 			draw: () => {
@@ -116,6 +117,10 @@ function makeTile(content, x, y, my_stats) {
 				if (t.active && t.revealed && t.fg) {
 					if (grid.current_frame % 30 == 0) { t.frame_index = (t.frame_index + 1) % t.fg.length; }
 					t.fg[t.frame_index].draw();
+					
+					for (let i = 0; my_stats.health && i < my_stats.health; ++i) {
+						t.hearts_full[i].draw();
+					}
 				}
 			},
 			clicked: (cx, cy) => {
@@ -180,7 +185,7 @@ function makeTile(content, x, y, my_stats) {
 				if (content.type == "monster_blu") { t = ["nor_asset/Monster3-1.png", "nor_asset/Monster3-2.png"]; }
 				if (content.type == "poison") { t = ["nor_asset/poison.png"]; }
 				
-				return tile({ fg: t, bg: content.bg }, (me) => {
+				const monster = tile({ fg: t, bg: content.bg }, (me) => {
 					stats.health -= me.my_stats.dmg;
 					stats.health = Math.max(0, stats.health);
 					if (stats.health <= 0) { game_state = gameover; }
@@ -190,6 +195,13 @@ function makeTile(content, x, y, my_stats) {
 					
 					grid.onhit();
 				});
+				
+				const offx = grid.step / 2 - my_stats.health / 2 * 16;
+				for (let i = 0; i < my_stats.health; ++i) {
+					monster.hearts_full.push(makeImage("nor_asset/mini_life.png", offx + i * 22 + x * grid.step, 2 + y * grid.step));
+				}
+				
+				return monster;
 			}
 			case "exit": {
 				return tile({ fg: ["nor_asset/exit.png"], bg: content.bg }, (me) => {
