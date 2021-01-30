@@ -116,7 +116,8 @@ function makeTile(content, x, y, my_stats) {
 			}
 			case "health": {
 				return tile({ fg: "nor_asset/health.png", bg: content.bg }, (me) => {
-					stats.health = stats.maxHealth;
+					stats.health += 1;
+					stats.health = Math.min(stats.maxHealth, stats.health);
 					me.die();
 				});
 			}
