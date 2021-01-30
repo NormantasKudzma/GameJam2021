@@ -1,4 +1,5 @@
 # GameJam2021
-When korona strikes
+When korona fermer strikes
 
+Play now:
 https://normantaskudzma.github.io/GameJam2021/ 
