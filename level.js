@@ -15,22 +15,22 @@ function CanPlaceRoom(level, x, y) {
 		return false;
 	}
 	if (TileInDungeon(level, x - 1, y - 1)) {
-		if (level[x - 1][y - 1] == TILE_ALIVE) {
+		if (level[x - 1][y] == TILE_ALIVE) {
 			return true;
 		}
 	}
 	if (TileInDungeon(level, x + 1, y - 1)) {
-		if (level[x + 1][y - 1] == TILE_ALIVE) {
+		if (level[x + 1][y] == TILE_ALIVE) {
 			return true;
 		}
 	}
 	if (TileInDungeon(level, x - 1, y + 1)) {
-        if (level[x - 1][y + 1] == TILE_ALIVE) {
+        if (level[x][y + 1] == TILE_ALIVE) {
 			return true;
 		}
 	}
 	if (TileInDungeon(level, x + 1, y + 1)) {
-        if (level[x + 1][y + 1] == TILE_ALIVE) {
+        if (level[x][y + 1] == TILE_ALIVE) {
 			return true;
 		}
 	}
