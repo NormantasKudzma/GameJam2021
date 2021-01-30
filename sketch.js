@@ -21,8 +21,6 @@ function windowResized() {
 }
 
 function draw() {
-	background(37,19,7);
-	
 	scale(global_scale);
 	grid.draw();
 	

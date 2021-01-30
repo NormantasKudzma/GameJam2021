@@ -1,7 +1,7 @@
 /** You no touch this okay */
 const img = void 0;
 const img_cache = {};
-const mouseover_tint = [240, 253, 255];
+const mouseover_tint = [190, 250, 190];
 
 function makeImage(path, x, y){
 	const img = {
