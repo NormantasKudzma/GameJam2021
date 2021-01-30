@@ -84,7 +84,7 @@ const grid = {
 		grid.hit_color = 0;
 		grid.tiles = [];
 		hero.init();
-		stats.maxHealth = 3;
+		stats.maxHealth = stats.initHealth;
 		gui.init();
 	},
 	gameover: () => {
@@ -121,10 +121,14 @@ function makeTile(content, x, y, my_stats) {
 			clicked: (cx, cy) => {
 				if (t.hovered(cx, cy)) {
 					console.log(`Clicked: ${content.type}`);
-					//const revealed_neighbour = t.neighbours.find(n => n.revealed && !n.active);
-					//if (revealed_neighbour) { hero.move(revealed_neighbour.x, revealed_neighbour.y); }
-					hero.move(t.x, t.y);
 					if (t.active) { click(t); } 
+					if (!t.active) {
+						hero.move(t.x, t.y);
+					}
+					else {
+						const revealed_neighbour = t.neighbours.find(n => n.revealed && !n.active);
+						if (revealed_neighbour) { hero.move(revealed_neighbour.x, revealed_neighbour.y); }
+					}
 				}
 			},
 			hovered: (cx, cy) => {

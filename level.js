@@ -75,7 +75,7 @@ function getLevel(isRandom, nr) {
 	} else switch (nr) {
 		case 1:
 			level = [//  1  2  3  4  5  6  7  8
-				/*1*/	[1, 1, 2, 1, 0, 0, 0, 0],
+				/*1*/	[1, 6, 2, 1, 0, 0, 0, 0],
 				/*2*/	[0, 1, 0, 3, 0, 0, 0, 0],
 				/*3*/	[0, 2, 2, 1, 0, 0, 0, 0],
 				/*4*/	[0, 1, 0, 2, 2, 1, 0, 0],
@@ -158,7 +158,7 @@ function do_the_map_thing() {
 		const t = types[num | 0];
 		let s = void 0;
 		if (t == "monster") { s = { "dmg": 1, "health": 1 }; }
-		if (t == "monster2") { s = { "dmg": 1, "health": 1 }; }
+		if (t == "monster_blu") { s = { "dmg": 1, "health": 2 }; }
 		if (t == "poison") { s = { "dmg": 1, "health": 1 }; }
 		if (t == "health") { s = { "heal": 1 }; }
 		if (t == "health2") { s = { "heal": 2 }; }
