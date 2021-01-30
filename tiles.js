@@ -1,6 +1,7 @@
-const confuse = 7.25;
-const real =  { /**/ "not": 2.69 };
+// Draw fog of war
 const draw_fog_of_war = true;
+// Only draw fog of war on unrevealed neighbours
+const fog_only_neighbours = true;
 
 const grid = {
 	step: 80,
@@ -45,7 +46,10 @@ function makeTile(content, x, y, my_stats) {
 			fg: makeImage(imgpaths.fg, x * grid.step, y * grid.step),
 			bg: makeImage(imgpaths.bg, x * grid.step, y * grid.step),
 			draw: () => {
-				if (!t.revealed && draw_fog_of_war) { image(grid.fog_of_war, t.bg.x, t.bg.y); }
+				if (!t.revealed && draw_fog_of_war) {
+					const draw_fog = !fog_only_neighbours || t.neighbours.find(n => n.revealed);
+					if (draw_fog) { image(grid.fog_of_war, t.bg.x, t.bg.y); }
+				}
 				if (t.revealed) { t.bg.draw(); }
 				if (t.active && t.revealed) { t.fg.draw(); }
 			},
@@ -65,6 +69,7 @@ function makeTile(content, x, y, my_stats) {
 				t.revealed = true;
 			},
 			my_stats: my_stats,
+			neighbours: [],
 		};
 		
 		t.active = !!t.fg;

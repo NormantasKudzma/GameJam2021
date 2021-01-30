@@ -100,10 +100,12 @@ function do_the_map_thing() {
 		for (let x = 0; x < level[y].length; ++x) {
 			if (level[y][x] == 0) { continue; }
 			
-			const tile = neighbours_to_tile[neighbours_of(x, y).join("")];
-			makeTile({ "type": "health", "bg": tile }, x, y);
+			const bg = neighbours_to_tile[neighbours_of(x, y).join("")];
+			makeTile({ "type": "health", "bg": bg }, x, y);
 		}
 	}
+	
+	grid.tiles.forEach(t => t.neighbours = grid.neighbours_of(t.x, t.y));
 	
 	// stub
 	grid.reveal(0, 0);
