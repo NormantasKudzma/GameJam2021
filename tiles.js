@@ -138,7 +138,7 @@ function makeTile(content, x, y, my_stats) {
 					t.fg[t.frame_index].draw();
 					
 					for (let i = 0; my_stats && i < my_stats.health | 0; ++i) {
-						t.hearts_full[i].draw();
+						if (t.hearts_full[i]) { t.hearts_full[i].draw(); }
 					}
 				}
 			},
@@ -186,8 +186,9 @@ function makeTile(content, x, y, my_stats) {
 			case "empty": {
 				return tile({ bg: content.bg }, (me) => {});
 			}
+			case "health2":
 			case "health": {
-				return tile({ fg: ["nor_asset/health.png"], bg: content.bg }, (me) => {
+				return tile({ fg: [ content.type == "health" ? "nor_asset/health.png" : "nor_asset/two_potions.png" ], bg: content.bg }, (me) => {
 					stats.health += my_stats.heal;
 					stats.health = Math.min(stats.maxHealth, stats.health);
 					me.die();
@@ -213,7 +214,7 @@ function makeTile(content, x, y, my_stats) {
 					s = "nor_asset/sounds/monster_die_3";
 				}
 				if (content.type == "poison") {
-					t = ["nor_asset/poison.png"];
+					t = ["nor_asset/potion_poison.png"];
 					s = "nor_asset/sounds/monster_die_3";
 				}
 
@@ -234,9 +235,11 @@ function makeTile(content, x, y, my_stats) {
 					grid.onhit();
 				});
 				
-				const offx = grid.step / 2 - my_stats.health / 2 * 16;
-				for (let i = 0; i < my_stats.health; ++i) {
-					monster.hearts_full.push(makeImage("nor_asset/mini_life.png", offx + i * 22 + x * grid.step, 2 + y * grid.step));
+				if (content.type != "poison") { 
+					const offx = grid.step / 2 - my_stats.health / 2 * 16;
+					for (let i = 0; i < my_stats.health; ++i) {
+						monster.hearts_full.push(makeImage("nor_asset/mini_life.png", offx + i * 22 + x * grid.step, 2 + y * grid.step));
+					}
 				}
 				
 				return monster;
