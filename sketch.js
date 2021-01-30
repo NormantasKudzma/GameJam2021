@@ -40,3 +40,9 @@ function mouseClicked() {
 function mouseMoved() { 
     if (game_state) { game_state.hover(mouseX / global_scale, mouseY / global_scale); }
 }
+
+function keyPressed() { 
+	if (key == 'f') {
+		fullscreen(!!!fullscreen());
+	}
+}

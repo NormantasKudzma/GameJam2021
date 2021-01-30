@@ -32,21 +32,13 @@ const grid = {
 		background(37 + grid.hit_color, 19, 26);
 		
 		texture(grid.background);
-		//rect(0, 0, width, height, 10, 10);
-		//image(grid.background, 0, 0, width / 4, height / 4, 0, 0, width, height);
-
-		let u = width / grid.background.width;
-		let v = height / grid.background.height;
-		textureWrap(REPEAT);
-		textureMode(NORMAL);
-		beginShape();
-			vertex(0, 0, 0, 0);
-			vertex(width, 0, u, 0);
-			vertex(width, height, u, v);
-			vertex(0, height, 0, v);
-		endShape();
-		textureWrap(CLAMP);
-		textureMode(IMAGE);
+		const u = 1 + width / grid.background.width;
+		const v = 1 + height / grid.background.height;
+		for (let i = 0; i < v; ++i) {
+			for (let j = 0; j < u; ++j) {
+				rect(j * grid.background.width, i * grid.background.height, grid.background.width, grid.background.height);
+			}
+		}
 
 		grid.tiles.forEach(t => t.draw());
 
@@ -69,9 +61,7 @@ const grid = {
 	},
 	init: () => {
 		grid.fog_of_war = loadImage("nor_asset/fog.png");
-		textureWrap(REPEAT);
 		grid.background = loadImage("nor_asset/BackgroundTexture.png");
-		textureWrap(CLAMP);
 		grid.clear();
 	},
 	find: (x, y) => {
