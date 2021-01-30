@@ -40,13 +40,16 @@ const grid = {
 		textureWrap(REPEAT);
 		textureMode(NORMAL);
 		beginShape();
-		vertex(0, 0, 0, 0);
-		vertex(width, 0, u, 0);
-		vertex(width, height, u, v);
-		vertex(0, height, 0, v);
+			vertex(0, 0, 0, 0);
+			vertex(width, 0, u, 0);
+			vertex(width, height, u, v);
+			vertex(0, height, 0, v);
 		endShape();
-		
+		textureWrap(CLAMP);
+		textureMode(IMAGE);
+
 		grid.tiles.forEach(t => t.draw());
+
 		hero.draw();
 		gui.draw();
 	},
