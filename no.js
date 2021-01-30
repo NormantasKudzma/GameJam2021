@@ -1,6 +1,6 @@
 const stats = {
-	maxHealth: 50,
-	health: 50,
+	maxHealth: 3,
+	health: 3,
 	dmg: 10,
 }
 

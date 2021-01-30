@@ -7,14 +7,17 @@ const grid = {
 	step: 80,
 	tiles: [],
 	fog_of_war: void 0,
+	is_game_over: false,
 	draw: () => {
 		grid.tiles.forEach(t => t.draw());
 	},
 	clicked: (x, y) => {
+		if (grid.is_game_over) { return; }
 		grid.tiles.forEach(t => t.clicked(x, y));
 	},
 	last_hovered: void 0,
 	hover: (x, y) => {
+		if (grid.is_game_over) { return; }
 		const new_hovered = grid.tiles.find(t => t.hovered(x, y));
 		if (new_hovered != grid.last_hovered) {
 			if (grid.last_hovered) { grid.last_hovered.highlight(false); }
@@ -42,6 +45,11 @@ const grid = {
 	},
 	clear: () => {
 		grid.tiles = [];
+		stats.health = stats.maxHealth;
+		
+	},
+	gameover: () => {
+		grid.is_game_over = true;
 	}
 };
 
@@ -99,7 +107,7 @@ function makeTile(content, x, y, my_stats) {
 			}
 			case "health": {
 				return tile({ fg: "nor_asset/health.png", bg: content.bg }, (me) => {
-					stats.health += stats.maxHealth;
+					stats.health = stats.maxHealth;
 					me.die();
 				})
 			}
@@ -107,7 +115,7 @@ function makeTile(content, x, y, my_stats) {
 				return tile({ fg: "nor_asset/bad.png", bg: content.bg }, (me) => {
 					stats.health -= me.my_stats.dmg;
 					stats.health = Math.max(0, stats.health);
-					if (stats.health <= 0) { console.log("Stub, gameover maybe"); }
+					if (stats.health <= 0) { grid.gameover(); }
 					
 					me.my_stats.health -= stats.dmg;
 					if (me.my_stats.health <= 0) { me.die(); }

@@ -97,8 +97,10 @@ function do_the_map_thing() {
 	};
 	
 	const randomType = () => {
-		const types = [ "health", "empty" ];
-		return types[(Math.random() * types.length) | 0];
+		const types = [ "health", "empty", "monster" ];
+		const t = types[(Math.random() * types.length) | 0];
+		const s = t == "monster" ? { "dmg": 1, "health": 1 } : void 0;
+		return { type: t, stats: s };
 	};
 	
 	for (let y = 0; y < level.length; ++y) {
@@ -106,7 +108,8 @@ function do_the_map_thing() {
 			if (level[y][x] == 0) { continue; }
 			
 			const bg = neighbours_to_tile[neighbours_of(x, y).join("")];
-			makeTile({ "type": randomType(), "bg": bg }, x, y);
+			const what = randomType();
+			makeTile({ "type": what.type, "bg": bg }, x, y, what.stats);
 		}
 	}
 	

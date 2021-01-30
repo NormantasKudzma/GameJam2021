@@ -7,6 +7,7 @@ function setup() {
 	canvas.style('display', 'block');
 	windowResized();
 	
+	gui.init();
 	grid.init();
 	
 	do_the_map_thing();
@@ -24,6 +25,8 @@ function draw() {
 	
 	scale(global_scale);
 	grid.draw();
+	
+	gui.draw();
 }
 
 function mouseClicked() {
