@@ -4,7 +4,7 @@ const intro = {
 		intro.img = makeImage("nor_asset/intro.png", 128, 128);
 	},
 	draw: () => {
-		background(255);
+		background(37, 19, 26);
 		intro.img.draw();
 	},
 	clicked: (cx, cy) => {
