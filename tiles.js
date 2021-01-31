@@ -108,6 +108,7 @@ const grid = {
 		hero.init();
 		if (!!!newlevel) {
 			stats.maxHealth = stats.initHealth;
+			stats.health = stats.maxHealth;
 		}
 		stats.dmg = stats.initDmg;
 		gui.init();
