@@ -101,12 +101,14 @@ const grid = {
 			grid.find(x + 0, y - 1),
 		].filter(n => n);
 	},
-	clear: () => {
+	clear: (newlevel) => {
 		grid.is_game_over = false;
 		grid.hit_color = 0;
 		grid.tiles = [];
 		hero.init();
-		stats.maxHealth = stats.initHealth;
+		if (!!!newlevel) {
+			stats.maxHealth = stats.initHealth;
+		}
 		stats.dmg = stats.initDmg;
 		gui.init();
 	},
@@ -262,7 +264,7 @@ function makeTile(content, x, y, my_stats) {
 			case "exit": {
 				return tile({ fg: ["nor_asset/exit.png"], bg: content.bg }, (me) => {
 					level_nr++;
-					do_the_map_thing();
+					do_the_map_thing(true);
 					hero.move(0, 0);
 				});
 			}

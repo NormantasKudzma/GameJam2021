@@ -119,8 +119,8 @@ function getLevel(isRandom, nr) {
 	return level;
 }
 
-function do_the_map_thing() {
-	grid.clear();
+function do_the_map_thing(newlevel) {
+	grid.clear(newlevel);
 	
 	const level = getLevel(false, level_nr);
 	
