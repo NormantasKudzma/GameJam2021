@@ -6,7 +6,7 @@ const gameover = {
 		gameover.img = makeImage("nor_asset/gameover.png", 110, 310);
 	},
 	draw: () => {
-		background(0);
+		background(37, 19, 26);
 		gameover.img.draw();
 		gameover.gif.draw();
 	},

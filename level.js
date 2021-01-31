@@ -98,6 +98,18 @@ function getLevel(isRandom, nr) {
 						[7, 2, 1, 0, 2, 1, 2, 1, 3, 0, 6, 4]  // 8
 			];
 			break;
+		case 3:
+			level = [//  1  2  3  4  5  6  7  8  9 10 11 12 13 14
+						[1, 1, 1, 7, 1, 0, 0, 6, 6, 3, 6, 2, 0, 7], // 1
+						[3, 0, 0, 0, 1, 0, 5, 1, 0, 0, 0, 2, 0, 8], // 2
+						[1, 0, 7, 0, 1, 0, 0, 0, 0, 10, 0, 7, 0, 1], // 3
+						[2, 0, 1, 1, 2, 0, 3, 1, 2, 6, 0, 1, 2, 1], // 4
+						[1, 0, 1, 0, 0, 0, 0, 3, 0, 0, 0, 1, 0, 2], // 5
+						[3, 0, 2, 0, 0, 3, 1, 1, 1, 8, 7, 2, 0, 1], // 6
+						[1, 0, 2, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1], // 7
+						[2, 1, 1, 0, 0, 2, 7, 9, 2, 6, 1, 3, 1, 3]  // 8
+			];
+			break;
 		default:
 			level = [
 				[ TILE_EMPTY ]
@@ -107,8 +119,8 @@ function getLevel(isRandom, nr) {
 	return level;
 }
 
-function do_the_map_thing() {
-	grid.clear();
+function do_the_map_thing(newlevel) {
+	grid.clear(newlevel);
 	
 	const level = getLevel(false, level_nr);
 	
